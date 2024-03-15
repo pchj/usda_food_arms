@@ -1,7 +1,8 @@
 import os
 import pandas as pd
 import requests
-
+import uuid
+from datetime import datetime
 
 # Function to fetch data from the API
 def fetch_data_from_api(api_key, url):
@@ -92,3 +93,15 @@ if missing_columns:
     print(f"Missing columns in the DataFrame: {missing_columns}")
 
 print("Schema validation and API data fetch completed.")
+
+# Generate unique identifier
+unique_id = uuid.uuid4()
+
+# Get current date
+current_date = datetime.now().strftime("%Y-%m-%d")
+
+# Save the DataFrame to a CSV file with unique name
+output_file_name = f"usda_arms_survey_data_{current_date}_{unique_id}.csv"
+output_file_path = os.path.join("usda_food_arms/data", output_file_name)
+df.to_csv(output_file_path, index=False)
+print(f"DataFrame saved to {output_file_path}")
