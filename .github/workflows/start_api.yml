@@ -1,8 +1,10 @@
 name: Run Script
+
 on:
   push:
     branches:
       - main
+
 jobs:
   run_script:
     runs-on: ubuntu-latest
@@ -19,7 +21,8 @@ jobs:
 
     - name: Set up environment variables
       run: |
-        echo "USDA_API_URL_TEMPLATE=https://api.ers.usda.gov/data/arms/surveydata?api_key=$USDA_API_KEY&year=2015,2016,2017,2018,2019,2020,2021,2022,2023&state=all&report=income+statement&farmtype=operator+households&category=collapsed+farm+typology&category_value=commercial" >> $GITHUB_ENV
+        echo "USDA_API_URL_TEMPLATE=https://api.ers.usda.gov/data/arms/surveydata?api_key=${{ secrets.USDA_API_KEY }}&year=2015,2016,2017,2018,2019,2020,2021,2022,2023&state=all&report=income+statement&farmtype=operator+households&category=collapsed+farm+typology&category_value=commercial" >> $GITHUB_ENV
+        echo "USDA_API_KEY=${{ secrets.USDA_API_KEY }}" >> $GITHUB_ENV
 
     - name: Find requirements.txt
       id: find_requirements
