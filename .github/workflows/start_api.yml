@@ -34,5 +34,16 @@ jobs:
     - name: Install dependencies
       run: pip install -r $REQUIREMENTS_PATH
 
+    - name: Find Python script
+      id: find_script
+      run: |
+        SCRIPT_PATH=$(find . -name 'usda_arms_survey_data.py' | head -n 1)
+        if [[ -z "$SCRIPT_PATH" ]]; then
+          echo "usda_arms_survey_data.py not found"
+          exit 1
+        fi
+        echo "SCRIPT_PATH=${SCRIPT_PATH}" >> $GITHUB_ENV
+        echo "Found script at $SCRIPT_PATH"
+
     - name: Run script
-      run: python usda_food_arms/usda_arms_survey_data.py
+      run: python $SCRIPT_PATH
