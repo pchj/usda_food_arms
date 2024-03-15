@@ -20,9 +20,19 @@ jobs:
       run: |
         echo "USDA_API_URL_TEMPLATE=https://api.ers.usda.gov/data/arms/surveydata?api_key=$USDA_API_KEY&year=2015,2016,2017,2018,2019,2020,2021,2022,2023&state=all&report=income+statement&farmtype=operator+households&category=collapsed+farm+typology&category_value=commercial" >> $GITHUB_ENV
 
-    - name: Install dependencies
+    - name: Find requirements.txt
+      id: find_requirements
       run: |
-        pip install -r usda_food_arms/requirements.txt
+        REQUIREMENTS_PATH=$(find . -name 'requirements.txt' | head -n 1)
+        if [[ -z "$REQUIREMENTS_PATH" ]]; then
+          echo "requirements.txt not found"
+          exit 1
+        fi
+        echo "REQUIREMENTS_PATH=${REQUIREMENTS_PATH}" >> $GITHUB_ENV
+        echo "Found requirements at $REQUIREMENTS_PATH"
+
+    - name: Install dependencies
+      run: pip install -r $REQUIREMENTS_PATH
 
     - name: Run script
       run: python usda_food_arms/usda_arms_survey_data.py
