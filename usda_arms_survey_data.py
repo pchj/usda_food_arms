@@ -5,9 +5,15 @@ import uuid
 from datetime import datetime
 
 # Function to fetch data from the API
-def fetch_data_from_api(api_key, url):
+def fetch_data_from_api(api_key, url, method='GET', payload=None):
     try:
-        response = requests.get(url)
+        if method == 'GET':
+            response = requests.get(url, params=payload)
+        elif method == 'POST':
+            response = requests.post(url, json=payload)
+        else:
+            raise ValueError("Unsupported HTTP method. Use GET or POST.")
+        
         response.raise_for_status()  # Raises a HTTPError if the status is 4xx, 5xx
         data = response.json()
         return data
@@ -16,16 +22,22 @@ def fetch_data_from_api(api_key, url):
 
 # Define API key and URL using environmental variables
 api_key = os.getenv('USDA_API_KEY')
-url_template = os.getenv('USDA_API_URL_TEMPLATE')
+url_template = "https://api.ers.usda.gov/data/arms/surveydata"
 
-if not api_key or not url_template:
-    raise ValueError("API key or URL template is missing. Please set environmental variables.")
+if not api_key:
+    raise ValueError("API key is missing. Please set the environmental variable USDA_API_KEY.")
 
-# Generate URL based on template
-url = url_template.format(api_key=api_key)
+# Generate payload for the API request
+payload = {
+    "year": [2011, 2012, 2013, 2014, 2015, 2016],
+    "state": "all",
+    "variable": "igcfi",
+    "category": "NASS Regions",
+    "category2": "Collapsed Farm Typology"
+}
 
 # Call the API and process the data
-data = fetch_data_from_api(api_key, url)
+data = fetch_data_from_api(api_key, url_template, method='POST', payload=payload)
 print("Data fetched from API:", data)  # Debug statement
 
 # Check if the API response contains data
