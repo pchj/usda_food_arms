@@ -11,17 +11,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
+    - name: Setup Python
+      uses: actions/setup-python@v5.0.0
       with:
-        python-version: 3.x
+        python-version: '3.x'
 
     - name: Set up environment variables
       run: |
         echo "USDA_API_URL_TEMPLATE=https://api.ers.usda.gov/data/arms/surveydata?api_key=$USDA_API_KEY&year=2015,2016,2017,2018,2019,2020,2021,2022,2023&state=all&report=income+statement&farmtype=operator+households&category=collapsed+farm+typology&category_value=commercial" >> $GITHUB_ENV
 
     - name: Install dependencies
-      run: pip install -r usda_food_arms/requirements.txt
+      run: |
+        pip install -r usda_food_arms/requirements.txt
 
     - name: Run script
       run: python usda_food_arms/usda_arms_survey_data.py
