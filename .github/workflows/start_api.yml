@@ -55,10 +55,3 @@ jobs:
     - name: Run script
       run: python $SCRIPT_PATH
 
-    - name: Commit CSV file
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add usda_food_arms/data/*
-        git commit -m "Add generated CSV file"
-        git push
