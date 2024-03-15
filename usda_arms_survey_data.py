@@ -52,9 +52,12 @@ unique_id = uuid.uuid4()
 
 # Get current date
 current_date = datetime.now().strftime("%Y-%m-%d")
+print(current_date)
+# Now, to print it in a CLI-friendly format instead:
+print(df.to_string(index=False))
 
 # Save the DataFrame to a CSV file with unique name
-output_file_name = f"usda_arms_survey_data_{current_date}_{unique_id}.csv"
-output_file_path = os.path.join("usda_food_arms/data", output_file_name)
-df.to_csv(output_file_path, index=False)
-print(f"DataFrame saved to {output_file_path}")
+# output_file_name = f"usda_arms_survey_data_{current_date}_{unique_id}.csv"
+# output_file_path = os.path.join("usda_food_arms/data", output_file_name)
+# df.to_csv(output_file_path, index=False)
+# print(f"DataFrame saved to {output_file_path}")
