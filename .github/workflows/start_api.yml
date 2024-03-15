@@ -24,6 +24,9 @@ jobs:
         echo "USDA_API_URL_TEMPLATE=https://api.ers.usda.gov/data/arms/surveydata?api_key=${{ secrets.USDA_API_KEY }}&year=2015&state=all&report=income+statement&farmtype=operator+households&category=collapsed+farm+typology&category_value=commercial" >> $GITHUB_ENV
         echo "USDA_API_KEY=${{ secrets.USDA_API_KEY }}" >> $GITHUB_ENV
 
+    - name: Create data directory
+      run: mkdir -p usda_food_arms/data
+
     - name: Find requirements.txt
       id: find_requirements
       run: |
