@@ -22,22 +22,16 @@ def fetch_data_from_api(api_key, url, method='GET', payload=None):
 
 # Define API key and URL using environmental variables
 api_key = os.getenv('USDA_API_KEY')
-url_template = "https://api.ers.usda.gov/data/arms/surveydata"
+url_template = "https://api.ers.usda.gov/data/arms/farmtype"
 
 if not api_key:
     raise ValueError("API key is missing. Please set the environmental variable USDA_API_KEY.")
 
-# Generate payload for the API request
-payload = {
-    "year": [2011, 2012, 2013, 2014, 2015, 2016],
-    "state": "all",
-    "variable": "igcfi",
-    "category": "NASS Regions",
-    "category2": "Collapsed Farm Typology"
-}
+# Generate payload for the API request (if needed)
+payload = None  # Modify this if a payload is needed
 
 # Call the API and process the data
-data = fetch_data_from_api(api_key, url_template, method='POST', payload=payload)
+data = fetch_data_from_api(api_key, f"{url_template}?api_key={api_key}", method='GET', payload=payload)
 print("Data fetched from API:", data)  # Debug statement
 
 # Check if the API response contains data
