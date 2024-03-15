@@ -3,6 +3,7 @@ import pandas as pd
 import requests
 import uuid
 from datetime import datetime
+import json
 
 # Function to fetch data from the API
 def fetch_data_from_api(api_key, url):
@@ -26,9 +27,15 @@ url = url_template.format(api_key=api_key)
 
 # Call the API and process the data
 data = fetch_data_from_api(api_key, url)
+print("Data fetched from API:", data)  # Debug statement
 
 # Assuming 'data' is a list of dictionaries, convert it into a DataFrame
-df = pd.DataFrame(data)
+try:
+    df = pd.DataFrame(data)
+    print("DataFrame created successfully.")
+except Exception as e:
+    print("Error creating DataFrame:", e)  # Debug statement
+    raise  # Reraise exception for detailed traceback
 
 # Define the expected schema
 expected_schema = {
@@ -76,6 +83,18 @@ expected_schema = {
     'report_Dim': 'object',
     'state': 'object',
 }
+
+# Parse JSON-like strings in the dataset
+def parse_json(json_str):
+    try:
+        return json.loads(json_str.replace("'", '"'))
+    except json.JSONDecodeError:
+        return None
+
+# Convert JSON-like columns to actual JSON objects
+json_columns = ['variableGroup', 'category2', 'series', 'survey_Dim']
+for column in json_columns:
+    df[column] = df[column].apply(parse_json)
 
 # Convert columns to the expected data type
 for column, dtype in expected_schema.items():
