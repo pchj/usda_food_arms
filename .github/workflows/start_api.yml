@@ -51,7 +51,9 @@ jobs:
         fi
         echo "SCRIPT_PATH=${SCRIPT_PATH}" >> $GITHUB_ENV
         echo "Found script at $SCRIPT_PATH"
-
     - name: Run script
+      id: run_script
       run: python $SCRIPT_PATH
-
+    - name: Print script output
+      run: |
+          cat $SCRIPT_PATH  # or echo "$(cat $SCRIPT_PATH)"
